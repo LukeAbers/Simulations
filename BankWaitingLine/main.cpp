@@ -95,6 +95,7 @@ class Bank
       stack <int> waitingListTime;
       int timeMarker;
       int tellerInterval;
+      int lengthOfDay;
 };
 
 //Report Function List
@@ -135,6 +136,9 @@ int main ()
   
   //Set Teller tellerInterval
   b.tellerInterval = 3;
+	
+  //Set length of day	
+  b.lengthOfDay = 180;
 
   //Variable to determine if new customer has arrived
   int newCustomer = 0;
@@ -151,7 +155,7 @@ int main ()
   string randLName = "";
 
   //Increment through day (10:00 AM - 1:00 PM = 180 minutes)
-  for (int i = 0; i < 180; i++)
+  for (int i = 0; i < b.lengthOfDay; i++)
   {
     cout << i << ":\n";
 
@@ -219,7 +223,7 @@ int main ()
             tmpTransaction = newCustomer = 1 + rand () % 4;
             tmpTransTime = newCustomer = 1 + rand () % 15;
             
-            if(i + tmpTransTime > 179){
+            if(i + tmpTransTime > b.lengthOfDay - 1){
                 cout << "Not enough time for transaction\n";
                 break;
             }
