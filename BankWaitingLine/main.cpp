@@ -10,11 +10,6 @@ using namespace std;
 //General Functions
 string calcTime(int);
 
-//Report Function List
-int avgWaitingListLength(stack <int>);
-double avgWaitingListTime(stack <int>);
-void sortTransactions(vector <Transaction>);
-
 class Customer
 {
 public:
@@ -99,6 +94,11 @@ class Bank
       int tellerInterval;
       int lengthOfDay;
 };
+
+//Report Function List
+int avgWaitingListLength(stack <int>);
+double avgWaitingListTime(stack <int>);
+void sortTransactions(vector <Transaction>);
 
 int main ()
 {
