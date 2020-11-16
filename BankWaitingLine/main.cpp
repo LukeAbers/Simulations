@@ -160,9 +160,8 @@ int main ()
     cout << i << ":\n";
 
     //Check for new Customer
-    newCustomer = 1 + rand () % 2;
-    if (newCustomer == 2)
-	{
+    newCustomer = 1 + rand () % 3;
+    if (newCustomer == 2){
 	  //Create random name  
 	  randInt = rand () % fNameVector.size ();
 	  randFName = fNameVector[randInt];
@@ -173,41 +172,42 @@ int main ()
 	  Customer tmpCustomer (randFName, randLName, i);
 	  b.customersWaiting.push_back (tmpCustomer);
 
-	  cout << "Size of waiting list: " << b.customersWaiting.size() << "\n";
-	  b.waitingListLength.push(b.customersWaiting.size());
-	}
+	cout << "Size of waiting list: " << b.customersWaiting.size() << "\n";
+	b.waitingListLength.push(b.customersWaiting.size());
+    }
+	
+	//Free up tellers 
+	for(int j = 0; j < b.mainTellerStack.size(); j++) {
+        if(b.mainTellerStack[j].freeTime == i && b.mainTellerStack[j].busy){
+                b.mainTellerStack[j].busy = false;
+		b.mainTellerStack[j].freeTime = -1;
+                cout << "Teller " << b.mainTellerStack[j].name << " has finished transaction\n";
+            }
+        }
 	
 	//Skip if no customers waiting
 	if(b.customersWaiting.size() == 0){
 	    cout << "No customers waiting at this time\n\n";
+	    b.waitingListLength.push(0);
 	    continue;
 	}
 	
-	//Free up tellers 
-	for(int j = 0; j < b.mainTellerStack.size(); j++) {
-        if(b.mainTellerStack[j].freeTime == i){
-            b.mainTellerStack[j].busy = false;
-            cout << "Teller " << b.mainTellerStack[j].name << " has finished transaction\n";
-        }
-    }
-	
 	//Add Tellers
 	if((b.customersWaiting.size() > 0 && b.workingTellerStack.size() < 1) || (b.customersWaiting.size() > 3 && b.workingTellerStack.size() < 2) || (b.customersWaiting.size() > 7 && b.workingTellerStack.size() < 3)){
-	     
 	    //Check for first non-working teller
-        for(int j = 0; j < b.mainTellerStack.size(); j++) {
-            if(!b.mainTellerStack[j].working){
-                b.mainTellerStack[j].working = true;
-                b.workingTellerStack.push(b.mainTellerStack[j]);
-                cout << "Teller " << b.workingTellerStack.top().name << " was added\n";
-                break;
+            for(int j = 0; j < b.mainTellerStack.size(); j++) {
+                if(!b.mainTellerStack[j].working){
+                    b.mainTellerStack[j].working = true;
+                    b.workingTellerStack.push(b.mainTellerStack[j]);
+                    cout << "Teller " << b.workingTellerStack.top().name << " was added\n";
+                    break;
+                }
             }
         }
-    }
 
     //Remove Tellers if necessary and not busy
     if((b.customersWaiting.size() < 3 && b.workingTellerStack.size() >= 2) || (b.customersWaiting.size() < 7 && b.workingTellerStack.size() >= 3)){
-        if(!b.workingTellerStack.top().busy){
+        if(!b.workingTellerStack.top().busy && b.workingTellerStack.top().working){
             b.workingTellerStack.top().working = false;
             
             cout << "Teller " << b.workingTellerStack.top().name << " was removed\n";
@@ -233,7 +233,6 @@ int main ()
             
             //Set customer wait time
             b.waitingListTime.push(i - b.customersWaiting[0].arrivalTime);
-            
             
             b.mainTellerStack[j].freeTime = i + tmpTransTime;
             
