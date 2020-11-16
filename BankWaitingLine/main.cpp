@@ -138,7 +138,7 @@ int main ()
   b.tellerInterval = 3;
 	
   //Set length of day	
-  b.lengthOfDay = 100;
+  b.lengthOfDay = 180;
 
   //Variable to determine if new customer has arrived
   int newCustomer = 0;
